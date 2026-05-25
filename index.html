@@ -4,138 +4,373 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Primers" />
-<meta name="theme-color" content="#ffffff" />
+<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icon-192.png" />
 <title>Primers</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --bg: #fafaf9;
+  --bg2: #f4f3f1;
+  --bg3: #eeede9;
+  --text: #111110;
+  --text2: #78776c;
+  --text3: #b5b3aa;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --accent: #111110;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f3;
-    --bg3: #eeecea;
-    --text: #1a1a18;
-    --text2: #6b6b68;
-    --text3: #9e9e9b;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --accent: #3c3489;
-    --accent-bg: #eeedfe;
-    --accent-text: #3c3489;
-    --warn-bg: #faeeda;
-    --warn-text: #854f0b;
-    --success-bg: #eaf3de;
-    --success-text: #3b6d11;
-    --danger-bg: #fcebeb;
-    --danger-text: #a32d2d;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #111110;
+    --bg2: #1a1a18;
+    --bg3: #222220;
+    --text: #f5f4ef;
+    --text2: #7e7d77;
+    --text3: #4a4944;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --accent: #f5f4ef;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1c1c1a;
-      --bg2: #252523;
-      --bg3: #2e2e2b;
-      --text: #f0ede8;
-      --text2: #a8a8a4;
-      --text3: #6b6b68;
-      --border: rgba(255,255,255,0.1);
-      --border2: rgba(255,255,255,0.2);
-      --accent: #afa9ec;
-      --accent-bg: #26215c;
-      --accent-text: #cecbf6;
-      --warn-bg: #412402;
-      --warn-text: #fac775;
-      --success-bg: #173404;
-      --success-text: #c0dd97;
-      --danger-bg: #501313;
-      --danger-text: #f7c1c1;
-    }
-  }
+}
 
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-text-size-adjust: 100%; }
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
 
-  #app { display: flex; flex-direction: column; height: 100%; padding-top: var(--safe-top); }
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: var(--safe-top);
+}
 
-  /* Header */
-  .header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid var(--border); background: var(--bg); flex-shrink: 0; }
-  .header-title { flex: 1; font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .icon-btn { background: none; border: none; cursor: pointer; padding: 6px; color: var(--text); font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; border-radius: var(--radius); }
-  .icon-btn:active { background: var(--bg2); }
-  .status-pill { font-size: 11px; padding: 3px 8px; border-radius: var(--radius); white-space: nowrap; }
-  .status-online { background: var(--success-bg); color: var(--success-text); }
-  .status-offline { background: var(--danger-bg); color: var(--danger-text); }
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+.header-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--text2);
+  font-size: 18px;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.icon-btn:active { background: var(--bg3); color: var(--text); }
 
-  /* Drawer overlay */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
-  .overlay.open { opacity: 1; pointer-events: all; }
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot.online { background: #3d9a50; }
+.status-dot.offline { background: #e5484d; }
 
-  /* Drawer */
-  .drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: var(--bg2); border-right: 0.5px solid var(--border); z-index: 50; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.22s ease; padding-top: var(--safe-top); }
-  .drawer.open { transform: translateX(0); }
-  .drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
-  .drawer-header span { font-weight: 500; font-size: 15px; }
-  .drawer-search { padding: 10px 12px; flex-shrink: 0; }
-  .drawer-search input { width: 100%; font-size: 13px; padding: 8px 10px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); outline: none; }
-  .drawer-search input:focus { border-color: var(--accent); }
-  .queue-banner { margin: 0 12px 8px; padding: 8px 10px; background: var(--warn-bg); border-radius: var(--radius); border: 0.5px solid var(--warn-text); flex-shrink: 0; }
-  .queue-banner p { font-size: 12px; color: var(--warn-text); }
-  .drawer-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .drawer-item { padding: 10px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .drawer-item:active { background: var(--bg3); }
-  .drawer-item.active { background: var(--bg); }
-  .drawer-item-text { flex: 1; min-width: 0; }
-  .drawer-item-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .drawer-item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .drawer-item-del { background: none; border: none; cursor: pointer; padding: 2px 0 2px 6px; color: var(--text3); font-size: 16px; flex-shrink: 0; }
-  .drawer-new { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 13px; color: var(--text2); }
-  .drawer-new:active { background: var(--bg3); }
+/* Overlay + Drawer */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 40; opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  backdrop-filter: blur(2px);
+}
+.overlay.open { opacity: 1; pointer-events: all; }
 
-  /* Main scroll area */
-  .main { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 20px 20px calc(20px + var(--safe-bottom)); }
+.drawer {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 270px; max-width: 82vw;
+  background: var(--bg);
+  z-index: 50;
+  display: flex; flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-top: var(--safe-top);
+}
+.drawer.open { transform: translateX(0); }
 
-  /* Form */
-  .form-label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px; }
-  .form-group { margin-bottom: 18px; }
-  input[type=text] { width: 100%; font-size: 15px; padding: 10px 12px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); outline: none; -webkit-appearance: none; }
-  input[type=text]:focus { border-color: var(--accent); }
-  .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .radio-group-label { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
-  .radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; padding: 4px 0; }
-  .radio-option input { accent-color: var(--accent); width: 16px; height: 16px; }
-  .generate-btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 500; border-radius: var(--radius-lg); border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text); cursor: pointer; -webkit-appearance: none; }
-  .generate-btn:active { background: var(--bg3); transform: scale(0.98); }
-  .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .offline-note { font-size: 12px; color: var(--text3); margin-top: 10px; text-align: center; }
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px;
+  flex-shrink: 0;
+}
+.drawer-header-title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
 
-  /* Primer content */
-  .primer-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-  .tag { font-size: 12px; padding: 3px 10px; border-radius: var(--radius); background: var(--bg2); color: var(--text2); border: 0.5px solid var(--border); }
-  .primer- { font-size: 15px; line-height: 1.75; color: var(--text); }
-  .primer- h1 { font-size: 20px; font-weight: 500; margin: 0 0 1rem; }
-  .primer- h2 { font-size: 17px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
-  .primer- h3 { font-size: 15px; font-weight: 500; margin: 1.2rem 0 0.4rem; }
-  .primer- p { margin: 0.6rem 0; }
-  .primer- ul, .primer- ol { padding-left: 1.4rem; margin: 0.5rem 0; }
-  .primer- li { margin: 4px 0; }
-  .primer- strong { font-weight: 500; }
-  .cursor { display: inline-block; width: 2px; height: 1em; background: var(--text2); border-radius: 1px; vertical-align: text-bottom; animation: blink 1s step-end infinite; margin-left: 1px; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.drawer-search {
+  padding: 0 14px 12px;
+  flex-shrink: 0;
+}
+.drawer-search input {
+  width: 100%;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  color: var(--text);
+  outline: none;
+}
+.drawer-search input:focus { border-color: var(--text3); }
+.drawer-search input::placeholder { color: var(--text3); }
 
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 14px; }
+.queue-banner {
+  margin: 0 14px 10px;
+  padding: 10px 12px;
+  background: #fefce8;
+  border-radius: var(--radius);
+  border: 1px solid #fde047;
+  flex-shrink: 0;
+}
+@media (prefers-color-scheme: dark) {
+  .queue-banner { background: #1c1a05; border-color: #713f12; }
+  .queue-banner p { color: #fde68a; }
+}
+.queue-banner p { font-size: 12px; color: #854d0e; }
+
+.drawer-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+.drawer-new {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text2);
+  border-radius: var(--radius);
+  margin: 0 6px 2px;
+}
+.drawer-new:active, .drawer-new.active { background: var(--bg2); color: var(--text); }
+
+.drawer-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 10px 9px 16px;
+  cursor: pointer;
+  border-radius: var(--radius);
+  margin: 0 6px 1px;
+  gap: 8px;
+}
+.drawer-item:active, .drawer-item.active { background: var(--bg2); }
+.drawer-item-text { flex: 1; min-width: 0; }
+.drawer-item-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
+.drawer-item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.drawer-item-del {
+  background: none; border: none; cursor: pointer;
+  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; color: var(--text3); font-size: 14px; flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.drawer-item:hover .drawer-item-del { opacity: 1; }
+.drawer-item-del:active { background: var(--bg3); opacity: 1; }
+
+.drawer-footer {
+  flex-shrink: 0;
+  padding: 8px 6px calc(8px + var(--safe-bottom));
+  border-top: 1px solid var(--border);
+}
+.drawer-settings {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px;
+  cursor: pointer;
+  font-size: 14px; color: var(--text2);
+  border-radius: var(--radius);
+}
+.drawer-settings:active { background: var(--bg2); color: var(--text); }
+
+/* Main */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 28px 24px calc(32px + var(--safe-bottom));
+}
+
+/* Form */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+input[type=text], input[type=password] {
+  width: 100%;
+  font-size: 15px;
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.15s;
+}
+input[type=text]:focus, input[type=password]:focus { border-color: var(--text2); }
+input::placeholder { color: var(--text3); }
+
+.radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.radio-group-label {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 10px;
+}
+
+.chip-group { display: flex; flex-direction: column; gap: 4px; }
+.chip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text2);
+  background: var(--bg);
+  transition: all 0.12s;
+  user-select: none;
+}
+.chip input[type=radio] { display: none; }
+.chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
+.chip-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; opacity: 0.4; flex-shrink: 0;
+}
+.chip.selected .chip-dot { opacity: 1; }
+
+.btn {
+  width: 100%;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border2);
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn:active { opacity: 0.8; transform: scale(0.99); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-ghost {
+  background: transparent;
+  color: var(--text2);
+  border-color: var(--border2);
+  margin-top: 10px;
+}
+.btn-danger { background: #e5484d; color: #fff; border-color: transparent; margin-top: 10px; }
+
+.offline-note { font-size: 12px; color: var(--text3); margin-top: 12px; text-align: center; line-height: 1.5; }
+
+/* Primer */
+.primer-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.tag {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--bg2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.primer-body { font-size: 16px; line-height: 1.8; color: var(--text); }
+.primer-body h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 1rem; line-height: 1.3; }
+.primer-body h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin: 2rem 0 0.6rem; line-height: 1.4; }
+.primer-body h3 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 1.4rem 0 0.4rem; }
+.primer-body p { margin: 0.7rem 0; color: var(--text2); }
+.primer-body h1 + p, .primer-body h2 + p, .primer-body h3 + p { color: var(--text); }
+.primer-body ul, .primer-body ol { padding-left: 1.4rem; margin: 0.6rem 0; }
+.primer-body li { margin: 5px 0; color: var(--text2); }
+.primer-body strong { font-weight: 600; color: var(--text); }
+.cursor {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--text3); border-radius: 1px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Onboarding / Settings */
+.key-screen { max-width: 420px; padding-top: 12px; }
+.key-screen h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
+.key-screen p { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.6; }
+.key-note { font-size: 12px; color: var(--text3); margin-top: 12px; line-height: 1.6; }
+.settings-screen { max-width: 420px; }
+.settings-screen h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 24px; }
+.key-display {
+  font-size: 13px; color: var(--text2);
+  padding: 11px 14px;
+  background: var(--bg2); border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text3); font-size: 13px; line-height: 1.6; }
 </style>
 </head>
-<>
+<body>
 <div id="app">
   <div class="header">
-    <button class="icon-btn" id="menu-btn" aria-label="Open library">&#xe9ba;</button>
+    <button class="icon-btn" id="menu-btn" aria-label="Open library">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="16" height="1.5" rx="0.75" fill="currentColor"/>
+        <rect y="5.25" width="16" height="1.5" rx="0.75" fill="currentColor"/>
+        <rect y="10.5" width="10" height="1.5" rx="0.75" fill="currentColor"/>
+      </svg>
+    </button>
     <span class="header-title" id="header-title">New Primer</span>
-    <span class="status-pill" id="status-pill">Online</span>
+    <span class="status-dot online" id="status-dot" title="Online"></span>
   </div>
   <div class="main" id="main-content"></div>
 </div>
@@ -143,20 +378,26 @@
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <span>My Primers</span>
-    <button class="icon-btn" id="close-drawer" aria-label="Close">&#xea76;</button>
+    <span class="drawer-header-title">Library</span>
+    <button class="icon-btn" id="close-drawer" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
   </div>
-  <div class="drawer-search"><input type="text" id="search-input" placeholder="Search primers…" /></div>
+  <div class="drawer-search"><input type="text" id="search-input" placeholder="Search…" /></div>
   <div class="queue-banner" id="queue-banner" style="display:none"></div>
   <div class="drawer-list" id="drawer-list"></div>
+  <div class="drawer-footer">
+    <div class="drawer-settings" id="settings-btn">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 9.5a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="1.2"/><path d="M12.5 7.5h-.7M3.2 7.5h-.7M7.5 2.7V2M7.5 13v-.7M10.9 4.1l-.5.5M4.6 10.4l-.5.5M10.9 10.9l-.5-.5M4.6 4.6l-.5-.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      API key
+    </div>
+  </div>
 </div>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
 
 <script>
 const STORAGE_KEY = "primers_v1";
 const QUEUE_KEY = "primers_queue_v1";
-const API_KEY = "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";
+const API_KEY_STORAGE = "primers_api_key";
 
 let primers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]");
@@ -167,66 +408,56 @@ let streamedText = "";
 
 const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(primers));
 const saveQ = () => localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+const getKey = () => localStorage.getItem(API_KEY_STORAGE) || "";
+const saveKey = k => localStorage.setItem(API_KEY_STORAGE, k);
 
-// --- Online/offline ---
 window.addEventListener("online", () => { isOnline = true; updateStatus(); processQueue(); });
 window.addEventListener("offline", () => { isOnline = false; updateStatus(); });
 function updateStatus() {
-  const el = document.getElementById("status-pill");
-  el.textContent = isOnline ? "Online" : "Offline";
-  el.className = "status-pill " + (isOnline ? "status-online" : "status-offline");
+  const el = document.getElementById("status-dot");
+  el.className = "status-dot " + (isOnline ? "online" : "offline");
+  el.title = isOnline ? "Online" : "Offline";
 }
-updateStatus();
 
-// --- Drawer ---
 const drawer = document.getElementById("drawer");
 const overlay = document.getElementById("overlay");
 document.getElementById("menu-btn").addEventListener("click", () => { drawer.classList.add("open"); overlay.classList.add("open"); });
 document.getElementById("close-drawer").addEventListener("click", closeDrawer);
 overlay.addEventListener("click", closeDrawer);
+document.getElementById("settings-btn").addEventListener("click", () => { setView("settings"); closeDrawer(); });
 function closeDrawer() { drawer.classList.remove("open"); overlay.classList.remove("open"); }
-
 document.getElementById("search-input").addEventListener("input", renderDrawerList);
 
-// --- Drawer list ---
 function renderDrawerList() {
   const q = document.getElementById("search-input").value.toLowerCase();
   const filtered = primers.filter(p => p.topic.toLowerCase().includes(q));
   const list = document.getElementById("drawer-list");
-
-  // Queue banner
   const qb = document.getElementById("queue-banner");
   if (queue.length > 0) {
     qb.style.display = "block";
-    qb.innerHTML = `<p style="font-weight:500">${queue.length} queued (offline)</p>${queue.map(i => `<p>${i.topic}</p>`).join("")}`;
-  } else {
-    qb.style.display = "none";
-  }
+    qb.innerHTML = `<p style="font-weight:500;margin-bottom:2px">${queue.length} queued</p>${queue.map(i=>`<p>${i.topic}</p>`).join("")}`;
+  } else qb.style.display = "none";
 
-  let html = `<div class="drawer-new ${currentView === "new" ? "active" : ""}" id="new-btn">
-    <i class="ti ti-plus" style="font-size:16px"></i> New primer
+  let html = `<div class="drawer-new ${currentView==="new"?"active":""}" id="new-btn">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    New primer
   </div>`;
-  if (!filtered.length) {
-    html += `<p class="empty-state">No primers yet</p>`;
-  } else {
-    filtered.forEach(p => {
-      html += `<div class="drawer-item ${currentView === p.id ? "active" : ""}" data-id="${p.id}">
-        <div class="drawer-item-text">
-          <div class="drawer-item-title">${esc(p.topic)}</div>
-          <div class="drawer-item-meta">${p.level} · ${p.length} · ${p.date}</div>
-        </div>
-        <button class="drawer-item-del" data-del="${p.id}" aria-label="Delete">&#xeb99;</button>
-      </div>`;
-    });
-  }
+  if (!filtered.length) html += `<p class="empty-state">No primers yet.<br>Generate your first one.</p>`;
+  else filtered.forEach(p => {
+    html += `<div class="drawer-item ${currentView===p.id?"active":""}" data-id="${p.id}">
+      <div class="drawer-item-text">
+        <div class="drawer-item-title">${esc(p.topic)}</div>
+        <div class="drawer-item-meta">${p.level} · ${p.length} · ${p.date}</div>
+      </div>
+      <button class="drawer-item-del" data-del="${p.id}" aria-label="Delete">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>`;
+  });
   list.innerHTML = html;
-
   list.querySelector("#new-btn").addEventListener("click", () => { setView("new"); closeDrawer(); });
   list.querySelectorAll(".drawer-item[data-id]").forEach(el => {
-    el.addEventListener("click", e => {
-      if (e.target.closest("[data-del]")) return;
-      setView(el.dataset.id); closeDrawer();
-    });
+    el.addEventListener("click", e => { if(e.target.closest("[data-del]")) return; setView(el.dataset.id); closeDrawer(); });
   });
   list.querySelectorAll("[data-del]").forEach(btn => {
     btn.addEventListener("click", e => { e.stopPropagation(); deletePrimer(btn.dataset.del); });
@@ -234,188 +465,214 @@ function renderDrawerList() {
 }
 
 function deletePrimer(id) {
-  primers = primers.filter(p => p.id !== id);
-  save();
-  if (currentView === id) setView("new");
-  else renderDrawerList();
+  primers = primers.filter(p => p.id !== id); save();
+  if (currentView === id) setView("new"); else renderDrawerList();
 }
 
-// --- View management ---
 function setView(id) {
   currentView = id;
-  document.getElementById("header-title").textContent = id === "new" ? "New Primer" : (primers.find(p => p.id === id)?.topic || "Primer");
-  renderMain();
-  renderDrawerList();
+  const titles = { new: "New Primer", settings: "Settings" };
+  document.getElementById("header-title").textContent = titles[id] || (primers.find(p=>p.id===id)?.topic || "Primer");
+  renderMain(); renderDrawerList();
 }
 
-// --- Main content ---
+function chipGroup(name, options, defaultVal) {
+  return `<div class="chip-group">${options.map(o => `
+    <label class="chip ${o===defaultVal?"selected":""}">
+      <input type="radio" name="${name}" value="${o}" ${o===defaultVal?"checked":""}>
+      <span class="chip-dot"></span>${o}
+    </label>`).join("")}</div>`;
+}
+
 function renderMain() {
   const el = document.getElementById("main-content");
-  if (currentView === "new") {
-    el.innerHTML = `
-      <div style="max-width:500px">
-        <div class="form-group">
-          <label class="form-label" for="topic-input">Topic</label>
-          <input type="text" id="topic-input" placeholder="e.g. Quantum computing, The French Revolution…" />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="subtopics-input">Subtopics <span style="color:var(--text3)">(optional)</span></label>
-          <input type="text" id="subtopics-input" placeholder="e.g. qubits, superposition, real-world applications" />
-        </div>
-        <div class="radio-grid">
-          <div>
-            <div class="radio-group-label">Level</div>
-            ${["Beginner","Intermediate","Expert"].map(l => `
-              <label class="radio-option">
-                <input type="radio" name="level" value="${l}" ${l === "Intermediate" ? "checked" : ""} /> ${l}
-              </label>`).join("")}
-          </div>
-          <div>
-            <div class="radio-group-label">Length</div>
-            ${["Short","Medium","Deep Dive"].map(l => `
-              <label class="radio-option">
-                <input type="radio" name="length" value="${l}" ${l === "Medium" ? "checked" : ""} /> ${l}
-              </label>`).join("")}
-          </div>
-        </div>
-        <button class="generate-btn" id="gen-btn">${isOnline ? "Generate primer" : "Queue for later"}</button>
-        ${!isOnline ? `<p class="offline-note">You're offline — primers will be queued and generated when you reconnect.</p>` : ""}
-      </div>`;
-    document.getElementById("topic-input").addEventListener("keydown", e => { if (e.key === "Enter") handleGenerate(); });
-    document.getElementById("gen-btn").addEventListener("click", handleGenerate);
-  } else {
-    const p = primers.find(x => x.id === currentView);
-    if (!p) { setView("new"); return; }
-    const tags = [p.level, p.length, p.date, p.subtopics ? `Subtopics: ${p.subtopics}` : ""].filter(Boolean);
-    el.innerHTML = `
-      <div class="primer-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-      <div class="primer-body" id="primer-body">${renderMd(p.generating ? streamedText : p.content)}${p.generating ? '<span class="cursor"></span>' : ""}</div>`;
+  const apiKey = getKey();
+
+  if (!apiKey && currentView !== "settings") {
+    el.innerHTML = `<div class="key-screen">
+      <h2>Welcome to Primers</h2>
+      <p>Enter your Anthropic API key to get started. Your key is stored only on this device and never shared anywhere.</p>
+      <div class="form-group">
+        <label class="form-label" for="key-input">API Key</label>
+        <input type="password" id="key-input" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      </div>
+      <button class="btn" id="save-key-btn">Continue</button>
+      <p class="key-note">Get your key at console.anthropic.com → API Keys</p>
+    </div>`;
+    document.getElementById("key-input").addEventListener("keydown", e => { if(e.key==="Enter") saveKeyAndContinue(); });
+    document.getElementById("save-key-btn").addEventListener("click", saveKeyAndContinue);
+    return;
   }
+
+  if (currentView === "settings") {
+    const masked = apiKey ? apiKey.slice(0,14)+"••••••••"+apiKey.slice(-4) : "No key saved";
+    el.innerHTML = `<div class="settings-screen">
+      <h2>API Key</h2>
+      <div class="form-group">
+        <label class="form-label">Current key</label>
+        <div class="key-display">${masked}</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new-key-input">Replace key</label>
+        <input type="password" id="new-key-input" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      </div>
+      <button class="btn" id="update-key-btn">Update key</button>
+      <div class="divider"></div>
+      <button class="btn btn-danger" id="delete-key-btn">Remove key</button>
+    </div>`;
+    document.getElementById("update-key-btn").addEventListener("click", () => {
+      const val = document.getElementById("new-key-input").value.trim();
+      if(!val) { alert("Please enter a key."); return; }
+      saveKey(val); alert("Key updated."); setView("new");
+    });
+    document.getElementById("delete-key-btn").addEventListener("click", () => {
+      if(confirm("Remove your API key?")) { localStorage.removeItem(API_KEY_STORAGE); setView("new"); }
+    });
+    return;
+  }
+
+  if (currentView === "new") {
+    el.innerHTML = `<div style="max-width:460px">
+      <div class="form-group">
+        <label class="form-label" for="topic-input">Topic</label>
+        <input type="text" id="topic-input" placeholder="e.g. Stoicism, Machine learning, The Roman Republic…" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="subtopics-input">Focus areas <span style="color:var(--text3);text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+        <input type="text" id="subtopics-input" placeholder="e.g. key figures, practical applications…" />
+      </div>
+      <div class="radio-grid">
+        <div>
+          <div class="radio-group-label">Level</div>
+          ${chipGroup("level", ["Beginner","Intermediate","Expert"], "Intermediate")}
+        </div>
+        <div>
+          <div class="radio-group-label">Length</div>
+          ${chipGroup("length", ["Short","Medium","Deep Dive"], "Medium")}
+        </div>
+      </div>
+      <button class="btn" id="gen-btn">${isOnline ? "Generate" : "Queue for later"}</button>
+      ${!isOnline ? `<p class="offline-note">You're offline — primers will generate when you reconnect.</p>` : ""}
+    </div>`;
+
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const name = chip.querySelector("input").name;
+        document.querySelectorAll(`.chip input[name="${name}"]`).forEach(i => i.closest(".chip").classList.remove("selected"));
+        chip.classList.add("selected");
+      });
+    });
+    document.getElementById("topic-input").addEventListener("keydown", e => { if(e.key==="Enter") handleGenerate(); });
+    document.getElementById("gen-btn").addEventListener("click", handleGenerate);
+    return;
+  }
+
+  const p = primers.find(x => x.id === currentView);
+  if (!p) { setView("new"); return; }
+  const tags = [p.level, p.length, p.date, p.subtopics ? p.subtopics : ""].filter(Boolean);
+  el.innerHTML = `
+    <div class="primer-tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+    <div class="primer-body" id="primer-body">${renderMd(p.generating ? streamedText : p.content)}${p.generating?'<span class="cursor"></span>':""}</div>`;
+}
+
+function saveKeyAndContinue() {
+  const val = document.getElementById("key-input")?.value.trim();
+  if(!val) { alert("Please paste your API key."); return; }
+  saveKey(val); setView("new");
 }
 
 function handleGenerate() {
   const topic = document.getElementById("topic-input")?.value.trim();
-  if (!topic || generating) return;
+  if(!topic || generating) return;
   const subtopics = document.getElementById("subtopics-input")?.value.trim() || "";
   const level = document.querySelector('input[name="level"]:checked')?.value || "Intermediate";
   const length = document.querySelector('input[name="length"]:checked')?.value || "Medium";
-
-  if (!isOnline) {
+  if(!isOnline) {
     const item = { id: Date.now().toString(), topic, subtopics, level, length, date: new Date().toLocaleDateString("en-GB") };
-    queue.push(item);
-    saveQ();
-    renderDrawerList();
-    alert(`"${topic}" queued — will generate when you reconnect.`);
-    return;
+    queue.push(item); saveQ(); renderDrawerList();
+    alert(`"${topic}" queued.`); return;
   }
   doGenerate(topic, subtopics, level, length);
 }
 
 async function doGenerate(topic, subtopics, level, length, existingId) {
   const id = existingId || Date.now().toString();
-  generating = true;
-  streamedText = "";
-
-  const lengthGuide = { Short: "around 300 words", Medium: "around 600 words", "Deep Dive": "around 1200 words" }[length];
+  generating = true; streamedText = "";
+  const lengthGuide = { Short:"around 300 words", Medium:"around 600 words", "Deep Dive":"around 1200 words" }[length];
   const stLine = subtopics ? `Focus especially on these subtopics: ${subtopics}.` : "";
   const prompt = `Write a ${level.toLowerCase()} level primer on: "${topic}". ${stLine} The primer should be ${lengthGuide}. Use markdown with clear headings. Start with a brief overview then cover key concepts in a structured way suited to a ${level.toLowerCase()} audience.`;
 
-  const existing = primers.find(p => p.id === id);
-  if (existing) {
-    existing.content = "";
-    existing.generating = true;
-  } else {
-    primers.unshift({ id, topic, subtopics, level, length, content: "", date: new Date().toLocaleDateString("en-GB"), generating: true });
-  }
-  save();
-  setView(id);
+  const existing = primers.find(p=>p.id===id);
+  if(existing) { existing.content=""; existing.generating=true; }
+  else primers.unshift({ id, topic, subtopics, level, length, content:"", date:new Date().toLocaleDateString("en-GB"), generating:true });
+  save(); setView(id);
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 2000,
-        stream: true,
-        messages: [{ role: "user", content: prompt }]
-      })
+      headers: { "Content-Type":"application/json", "x-api-key":getKey(), "anthropic-version":"2023-06-01" },
+      body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:2000, stream:true, messages:[{role:"user",content:prompt}] })
     });
-
+    if(!res.ok) throw new Error(`${res.status}`);
     const reader = res.body.getReader();
     const dec = new TextDecoder();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      for (const line of dec.decode(value).split("\n")) {
-        if (line.startsWith("data: ")) {
+    while(true) {
+      const {done,value} = await reader.read();
+      if(done) break;
+      for(const line of dec.decode(value).split("\n")) {
+        if(line.startsWith("data: ")) {
           const raw = line.slice(6).trim();
-          if (raw === "[DONE]") break;
+          if(raw==="[DONE]") break;
           try {
-            const delta = JSON.parse(raw)?.delta?.text || "";
-            if (delta) {
-              streamedText += delta;
-              const body = document.getElementById("primer-body");
-              if (body) body.innerHTML = renderMd(streamedText) + '<span class="cursor"></span>';
+            const delta = JSON.parse(raw)?.delta?.text||"";
+            if(delta) {
+              streamedText+=delta;
+              const body=document.getElementById("primer-body");
+              if(body) body.innerHTML=renderMd(streamedText)+'<span class="cursor"></span>';
             }
-          } catch {}
+          } catch{}
         }
       }
     }
-    const pr = primers.find(p => p.id === id);
-    if (pr) { pr.content = streamedText; pr.generating = false; }
+    const pr=primers.find(p=>p.id===id);
+    if(pr) { pr.content=streamedText; pr.generating=false; }
     save();
-    const body = document.getElementById("primer-body");
-    if (body) body.innerHTML = renderMd(streamedText);
-  } catch (e) {
-    const pr = primers.find(p => p.id === id);
-    if (pr) { pr.content = "Error generating primer. Please try again."; pr.generating = false; }
-    save();
-    renderMain();
+    const body=document.getElementById("primer-body");
+    if(body) body.innerHTML=renderMd(streamedText);
+  } catch(e) {
+    const pr=primers.find(p=>p.id===id);
+    if(pr) { pr.content=`Error: ${e.message}. Check your API key in settings.`; pr.generating=false; }
+    save(); renderMain();
   }
-  generating = false;
-  document.getElementById("header-title").textContent = topic;
+  generating=false;
+  document.getElementById("header-title").textContent=topic;
   renderDrawerList();
 }
 
 async function processQueue() {
-  if (!queue.length || generating) return;
-  const item = queue.shift();
-  saveQ();
-  renderDrawerList();
-  await doGenerate(item.topic, item.subtopics, item.level, item.length, item.id);
-  setTimeout(processQueue, 500);
+  if(!queue.length||generating) return;
+  const item=queue.shift(); saveQ(); renderDrawerList();
+  await doGenerate(item.topic,item.subtopics,item.level,item.length,item.id);
+  setTimeout(processQueue,500);
 }
 
-// --- Markdown renderer ---
 function renderMd(text) {
-  if (!text) return "";
+  if(!text) return "";
   return text
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/^- (.+)$/gm, "<li>$1</li>")
-    .replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g, m => `<ul>${m}</ul>`)
-    .replace(/\n\n+/g, "</p><p>")
-    .replace(/\n/g, "<br>")
-    .replace(/^(?!<[hup])(.)/gm, "<p>$&")
-    .replace(/([^>])$/gm, "$1</p>")
-    .replace(/<p><\/p>/g, "");
+    .replace(/^### (.+)$/gm,"<h3>$1</h3>").replace(/^## (.+)$/gm,"<h2>$1</h2>").replace(/^# (.+)$/gm,"<h1>$1</h1>")
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>")
+    .replace(/^- (.+)$/gm,"<li>$1</li>")
+    .replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g,m=>`<ul>${m}</ul>`)
+    .replace(/\n\n+/g,"</p><p>").replace(/\n/g,"<br>")
+    .replace(/^(?!<[hup])(.)/gm,"<p>$&").replace(/([^>])$/gm,"$1</p>")
+    .replace(/<p><\/p>/g,"");
 }
 function esc(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
-// --- Init ---
-renderDrawerList();
-renderMain();
-if (isOnline && queue.length) processQueue();
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
-  }
+renderDrawerList(); renderMain();
+if(isOnline&&queue.length) processQueue();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/primers/sw.js');
 </script>
 </body>
 </html>
