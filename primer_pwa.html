@@ -116,21 +116,21 @@
   /* Primer content */
   .primer-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
   .tag { font-size: 12px; padding: 3px 10px; border-radius: var(--radius); background: var(--bg2); color: var(--text2); border: 0.5px solid var(--border); }
-  .primer-body { font-size: 15px; line-height: 1.75; color: var(--text); }
-  .primer-body h1 { font-size: 20px; font-weight: 500; margin: 0 0 1rem; }
-  .primer-body h2 { font-size: 17px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
-  .primer-body h3 { font-size: 15px; font-weight: 500; margin: 1.2rem 0 0.4rem; }
-  .primer-body p { margin: 0.6rem 0; }
-  .primer-body ul, .primer-body ol { padding-left: 1.4rem; margin: 0.5rem 0; }
-  .primer-body li { margin: 4px 0; }
-  .primer-body strong { font-weight: 500; }
+  .primer- { font-size: 15px; line-height: 1.75; color: var(--text); }
+  .primer- h1 { font-size: 20px; font-weight: 500; margin: 0 0 1rem; }
+  .primer- h2 { font-size: 17px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
+  .primer- h3 { font-size: 15px; font-weight: 500; margin: 1.2rem 0 0.4rem; }
+  .primer- p { margin: 0.6rem 0; }
+  .primer- ul, .primer- ol { padding-left: 1.4rem; margin: 0.5rem 0; }
+  .primer- li { margin: 4px 0; }
+  .primer- strong { font-weight: 500; }
   .cursor { display: inline-block; width: 2px; height: 1em; background: var(--text2); border-radius: 1px; vertical-align: text-bottom; animation: blink 1s step-end infinite; margin-left: 1px; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
   .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 14px; }
 </style>
 </head>
-<body>
+<>
 <div id="app">
   <div class="header">
     <button class="icon-btn" id="menu-btn" aria-label="Open library">&#xe9ba;</button>
@@ -411,6 +411,11 @@ function esc(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 renderDrawerList();
 renderMain();
 if (isOnline && queue.length) processQueue();
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
 </script>
 </body>
 </html>
