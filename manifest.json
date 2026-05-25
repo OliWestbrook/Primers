@@ -2,7 +2,7 @@
   "name": "Primers",
   "short_name": "Primers",
   "description": "AI-powered topic primers",
-  "start_url": "/",
+  "start_url": "/Primers/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
