@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Primers" />
+<meta name="theme-color" content="#ffffff" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<title>Primers</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #eeecea;
+    --text: #1a1a18;
+    --text2: #6b6b68;
+    --text3: #9e9e9b;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --accent: #3c3489;
+    --accent-bg: #eeedfe;
+    --accent-text: #3c3489;
+    --warn-bg: #faeeda;
+    --warn-text: #854f0b;
+    --success-bg: #eaf3de;
+    --success-text: #3b6d11;
+    --danger-bg: #fcebeb;
+    --danger-text: #a32d2d;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2e2e2b;
+      --text: #f0ede8;
+      --text2: #a8a8a4;
+      --text3: #6b6b68;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --accent: #afa9ec;
+      --accent-bg: #26215c;
+      --accent-text: #cecbf6;
+      --warn-bg: #412402;
+      --warn-text: #fac775;
+      --success-bg: #173404;
+      --success-text: #c0dd97;
+      --danger-bg: #501313;
+      --danger-text: #f7c1c1;
+    }
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-text-size-adjust: 100%; }
+
+  #app { display: flex; flex-direction: column; height: 100%; padding-top: var(--safe-top); }
+
+  /* Header */
+  .header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid var(--border); background: var(--bg); flex-shrink: 0; }
+  .header-title { flex: 1; font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .icon-btn { background: none; border: none; cursor: pointer; padding: 6px; color: var(--text); font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; border-radius: var(--radius); }
+  .icon-btn:active { background: var(--bg2); }
+  .status-pill { font-size: 11px; padding: 3px 8px; border-radius: var(--radius); white-space: nowrap; }
+  .status-online { background: var(--success-bg); color: var(--success-text); }
+  .status-offline { background: var(--danger-bg); color: var(--danger-text); }
+
+  /* Drawer overlay */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
+  .overlay.open { opacity: 1; pointer-events: all; }
+
+  /* Drawer */
+  .drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 85vw; background: var(--bg2); border-right: 0.5px solid var(--border); z-index: 50; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.22s ease; padding-top: var(--safe-top); }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
+  .drawer-header span { font-weight: 500; font-size: 15px; }
+  .drawer-search { padding: 10px 12px; flex-shrink: 0; }
+  .drawer-search input { width: 100%; font-size: 13px; padding: 8px 10px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); outline: none; }
+  .drawer-search input:focus { border-color: var(--accent); }
+  .queue-banner { margin: 0 12px 8px; padding: 8px 10px; background: var(--warn-bg); border-radius: var(--radius); border: 0.5px solid var(--warn-text); flex-shrink: 0; }
+  .queue-banner p { font-size: 12px; color: var(--warn-text); }
+  .drawer-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .drawer-item { padding: 10px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .drawer-item:active { background: var(--bg3); }
+  .drawer-item.active { background: var(--bg); }
+  .drawer-item-text { flex: 1; min-width: 0; }
+  .drawer-item-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .drawer-item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .drawer-item-del { background: none; border: none; cursor: pointer; padding: 2px 0 2px 6px; color: var(--text3); font-size: 16px; flex-shrink: 0; }
+  .drawer-new { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 13px; color: var(--text2); }
+  .drawer-new:active { background: var(--bg3); }
+
+  /* Main scroll area */
+  .main { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 20px 20px calc(20px + var(--safe-bottom)); }
+
+  /* Form */
+  .form-label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px; }
+  .form-group { margin-bottom: 18px; }
+  input[type=text] { width: 100%; font-size: 15px; padding: 10px 12px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); outline: none; -webkit-appearance: none; }
+  input[type=text]:focus { border-color: var(--accent); }
+  .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .radio-group-label { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+  .radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; padding: 4px 0; }
+  .radio-option input { accent-color: var(--accent); width: 16px; height: 16px; }
+  .generate-btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 500; border-radius: var(--radius-lg); border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text); cursor: pointer; -webkit-appearance: none; }
+  .generate-btn:active { background: var(--bg3); transform: scale(0.98); }
+  .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .offline-note { font-size: 12px; color: var(--text3); margin-top: 10px; text-align: center; }
+
+  /* Primer content */
+  .primer-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: var(--radius); background: var(--bg2); color: var(--text2); border: 0.5px solid var(--border); }
+  .primer-body { font-size: 15px; line-height: 1.75; color: var(--text); }
+  .primer-body h1 { font-size: 20px; font-weight: 500; margin: 0 0 1rem; }
+  .primer-body h2 { font-size: 17px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
+  .primer-body h3 { font-size: 15px; font-weight: 500; margin: 1.2rem 0 0.4rem; }
+  .primer-body p { margin: 0.6rem 0; }
+  .primer-body ul, .primer-body ol { padding-left: 1.4rem; margin: 0.5rem 0; }
+  .primer-body li { margin: 4px 0; }
+  .primer-body strong { font-weight: 500; }
+  .cursor { display: inline-block; width: 2px; height: 1em; background: var(--text2); border-radius: 1px; vertical-align: text-bottom; animation: blink 1s step-end infinite; margin-left: 1px; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 14px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <button class="icon-btn" id="menu-btn" aria-label="Open library">&#xe9ba;</button>
+    <span class="header-title" id="header-title">New Primer</span>
+    <span class="status-pill" id="status-pill">Online</span>
+  </div>
+  <div class="main" id="main-content"></div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span>My Primers</span>
+    <button class="icon-btn" id="close-drawer" aria-label="Close">&#xea76;</button>
+  </div>
+  <div class="drawer-search"><input type="text" id="search-input" placeholder="Search primers…" /></div>
+  <div class="queue-banner" id="queue-banner" style="display:none"></div>
+  <div class="drawer-list" id="drawer-list"></div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+
+<script>
+const STORAGE_KEY = "primers_v1";
+const QUEUE_KEY = "primers_queue_v1";
+const API_KEY = "YOUR_ANTHROPIC_API_KEY"; // <-- paste your key here
+
+let primers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]");
+let currentView = "new";
+let isOnline = navigator.onLine;
+let generating = false;
+let streamedText = "";
+
+const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(primers));
+const saveQ = () => localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+
+// --- Online/offline ---
+window.addEventListener("online", () => { isOnline = true; updateStatus(); processQueue(); });
+window.addEventListener("offline", () => { isOnline = false; updateStatus(); });
+function updateStatus() {
+  const el = document.getElementById("status-pill");
+  el.textContent = isOnline ? "Online" : "Offline";
+  el.className = "status-pill " + (isOnline ? "status-online" : "status-offline");
+}
+updateStatus();
+
+// --- Drawer ---
+const drawer = document.getElementById("drawer");
+const overlay = document.getElementById("overlay");
+document.getElementById("menu-btn").addEventListener("click", () => { drawer.classList.add("open"); overlay.classList.add("open"); });
+document.getElementById("close-drawer").addEventListener("click", closeDrawer);
+overlay.addEventListener("click", closeDrawer);
+function closeDrawer() { drawer.classList.remove("open"); overlay.classList.remove("open"); }
+
+document.getElementById("search-input").addEventListener("input", renderDrawerList);
+
+// --- Drawer list ---
+function renderDrawerList() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  const filtered = primers.filter(p => p.topic.toLowerCase().includes(q));
+  const list = document.getElementById("drawer-list");
+
+  // Queue banner
+  const qb = document.getElementById("queue-banner");
+  if (queue.length > 0) {
+    qb.style.display = "block";
+    qb.innerHTML = `<p style="font-weight:500">${queue.length} queued (offline)</p>${queue.map(i => `<p>${i.topic}</p>`).join("")}`;
+  } else {
+    qb.style.display = "none";
+  }
+
+  let html = `<div class="drawer-new ${currentView === "new" ? "active" : ""}" id="new-btn">
+    <i class="ti ti-plus" style="font-size:16px"></i> New primer
+  </div>`;
+  if (!filtered.length) {
+    html += `<p class="empty-state">No primers yet</p>`;
+  } else {
+    filtered.forEach(p => {
+      html += `<div class="drawer-item ${currentView === p.id ? "active" : ""}" data-id="${p.id}">
+        <div class="drawer-item-text">
+          <div class="drawer-item-title">${esc(p.topic)}</div>
+          <div class="drawer-item-meta">${p.level} · ${p.length} · ${p.date}</div>
+        </div>
+        <button class="drawer-item-del" data-del="${p.id}" aria-label="Delete">&#xeb99;</button>
+      </div>`;
+    });
+  }
+  list.innerHTML = html;
+
+  list.querySelector("#new-btn").addEventListener("click", () => { setView("new"); closeDrawer(); });
+  list.querySelectorAll(".drawer-item[data-id]").forEach(el => {
+    el.addEventListener("click", e => {
+      if (e.target.closest("[data-del]")) return;
+      setView(el.dataset.id); closeDrawer();
+    });
+  });
+  list.querySelectorAll("[data-del]").forEach(btn => {
+    btn.addEventListener("click", e => { e.stopPropagation(); deletePrimer(btn.dataset.del); });
+  });
+}
+
+function deletePrimer(id) {
+  primers = primers.filter(p => p.id !== id);
+  save();
+  if (currentView === id) setView("new");
+  else renderDrawerList();
+}
+
+// --- View management ---
+function setView(id) {
+  currentView = id;
+  document.getElementById("header-title").textContent = id === "new" ? "New Primer" : (primers.find(p => p.id === id)?.topic || "Primer");
+  renderMain();
+  renderDrawerList();
+}
+
+// --- Main content ---
+function renderMain() {
+  const el = document.getElementById("main-content");
+  if (currentView === "new") {
+    el.innerHTML = `
+      <div style="max-width:500px">
+        <div class="form-group">
+          <label class="form-label" for="topic-input">Topic</label>
+          <input type="text" id="topic-input" placeholder="e.g. Quantum computing, The French Revolution…" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subtopics-input">Subtopics <span style="color:var(--text3)">(optional)</span></label>
+          <input type="text" id="subtopics-input" placeholder="e.g. qubits, superposition, real-world applications" />
+        </div>
+        <div class="radio-grid">
+          <div>
+            <div class="radio-group-label">Level</div>
+            ${["Beginner","Intermediate","Expert"].map(l => `
+              <label class="radio-option">
+                <input type="radio" name="level" value="${l}" ${l === "Intermediate" ? "checked" : ""} /> ${l}
+              </label>`).join("")}
+          </div>
+          <div>
+            <div class="radio-group-label">Length</div>
+            ${["Short","Medium","Deep Dive"].map(l => `
+              <label class="radio-option">
+                <input type="radio" name="length" value="${l}" ${l === "Medium" ? "checked" : ""} /> ${l}
+              </label>`).join("")}
+          </div>
+        </div>
+        <button class="generate-btn" id="gen-btn">${isOnline ? "Generate primer" : "Queue for later"}</button>
+        ${!isOnline ? `<p class="offline-note">You're offline — primers will be queued and generated when you reconnect.</p>` : ""}
+      </div>`;
+    document.getElementById("topic-input").addEventListener("keydown", e => { if (e.key === "Enter") handleGenerate(); });
+    document.getElementById("gen-btn").addEventListener("click", handleGenerate);
+  } else {
+    const p = primers.find(x => x.id === currentView);
+    if (!p) { setView("new"); return; }
+    const tags = [p.level, p.length, p.date, p.subtopics ? `Subtopics: ${p.subtopics}` : ""].filter(Boolean);
+    el.innerHTML = `
+      <div class="primer-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+      <div class="primer-body" id="primer-body">${renderMd(p.generating ? streamedText : p.content)}${p.generating ? '<span class="cursor"></span>' : ""}</div>`;
+  }
+}
+
+function handleGenerate() {
+  const topic = document.getElementById("topic-input")?.value.trim();
+  if (!topic || generating) return;
+  const subtopics = document.getElementById("subtopics-input")?.value.trim() || "";
+  const level = document.querySelector('input[name="level"]:checked')?.value || "Intermediate";
+  const length = document.querySelector('input[name="length"]:checked')?.value || "Medium";
+
+  if (!isOnline) {
+    const item = { id: Date.now().toString(), topic, subtopics, level, length, date: new Date().toLocaleDateString("en-GB") };
+    queue.push(item);
+    saveQ();
+    renderDrawerList();
+    alert(`"${topic}" queued — will generate when you reconnect.`);
+    return;
+  }
+  doGenerate(topic, subtopics, level, length);
+}
+
+async function doGenerate(topic, subtopics, level, length, existingId) {
+  const id = existingId || Date.now().toString();
+  generating = true;
+  streamedText = "";
+
+  const lengthGuide = { Short: "around 300 words", Medium: "around 600 words", "Deep Dive": "around 1200 words" }[length];
+  const stLine = subtopics ? `Focus especially on these subtopics: ${subtopics}.` : "";
+  const prompt = `Write a ${level.toLowerCase()} level primer on: "${topic}". ${stLine} The primer should be ${lengthGuide}. Use markdown with clear headings. Start with a brief overview then cover key concepts in a structured way suited to a ${level.toLowerCase()} audience.`;
+
+  const existing = primers.find(p => p.id === id);
+  if (existing) {
+    existing.content = "";
+    existing.generating = true;
+  } else {
+    primers.unshift({ id, topic, subtopics, level, length, content: "", date: new Date().toLocaleDateString("en-GB"), generating: true });
+  }
+  save();
+  setView(id);
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 2000,
+        stream: true,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of dec.decode(value).split("\n")) {
+        if (line.startsWith("data: ")) {
+          const raw = line.slice(6).trim();
+          if (raw === "[DONE]") break;
+          try {
+            const delta = JSON.parse(raw)?.delta?.text || "";
+            if (delta) {
+              streamedText += delta;
+              const body = document.getElementById("primer-body");
+              if (body) body.innerHTML = renderMd(streamedText) + '<span class="cursor"></span>';
+            }
+          } catch {}
+        }
+      }
+    }
+    const pr = primers.find(p => p.id === id);
+    if (pr) { pr.content = streamedText; pr.generating = false; }
+    save();
+    const body = document.getElementById("primer-body");
+    if (body) body.innerHTML = renderMd(streamedText);
+  } catch (e) {
+    const pr = primers.find(p => p.id === id);
+    if (pr) { pr.content = "Error generating primer. Please try again."; pr.generating = false; }
+    save();
+    renderMain();
+  }
+  generating = false;
+  document.getElementById("header-title").textContent = topic;
+  renderDrawerList();
+}
+
+async function processQueue() {
+  if (!queue.length || generating) return;
+  const item = queue.shift();
+  saveQ();
+  renderDrawerList();
+  await doGenerate(item.topic, item.subtopics, item.level, item.length, item.id);
+  setTimeout(processQueue, 500);
+}
+
+// --- Markdown renderer ---
+function renderMd(text) {
+  if (!text) return "";
+  return text
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/^- (.+)$/gm, "<li>$1</li>")
+    .replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g, m => `<ul>${m}</ul>`)
+    .replace(/\n\n+/g, "</p><p>")
+    .replace(/\n/g, "<br>")
+    .replace(/^(?!<[hup])(.)/gm, "<p>$&")
+    .replace(/([^>])$/gm, "$1</p>")
+    .replace(/<p><\/p>/g, "");
+}
+function esc(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// --- Init ---
+renderDrawerList();
+renderMain();
+if (isOnline && queue.length) processQueue();
+</script>
+</body>
+</html>
